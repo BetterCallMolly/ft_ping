@@ -53,3 +53,7 @@ dkms.conf
 
 venv
 __pycache__
+*.pdf
+ft_ping
+ping
+test.txt
