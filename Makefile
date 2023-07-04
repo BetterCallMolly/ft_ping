@@ -1,5 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3 -MMD
+INCLUDES = -I./includes
+CFLAGS = -Wall -Wextra -Werror -g3 -MMD $(INCLUDES)
 NAME = ft_ping
 
 SRCS := srcs/main.c
