@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <arpa/inet.h>
-
-#ifndef DATA_SIZE
-    #define DATA_SIZE 56
-#endif
+#include "ft_ping.h"
 
 int main(int argc, char **argv) {
     if (argc == 1) {
@@ -32,4 +24,6 @@ int main(int argc, char **argv) {
         fprintf(stderr, "ft_ping: %s: Invalid IP address\n", argv[1]);
         exit(1);
     }
+
+    // At this point, we have a valid IP address
 }
