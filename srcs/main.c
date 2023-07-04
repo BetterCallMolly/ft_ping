@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
+#ifndef DATA_SIZE
+    #define DATA_SIZE 56
+#endif
+
 int main(int argc, char **argv) {
     if (argc == 1) {
         fprintf(stderr, "ft_ping: missing host operand\n");
@@ -28,8 +32,4 @@ int main(int argc, char **argv) {
         fprintf(stderr, "ft_ping: %s: Invalid IP address\n", argv[1]);
         exit(1);
     }
-    // Print the IP
-    char ip[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &(sa.sin_addr), ip, INET_ADDRSTRLEN);
-    printf("PING %s (%s) 56(84) bytes of data.\n", argv[1], ip);
 }
