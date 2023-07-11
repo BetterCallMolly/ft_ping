@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define MAX_SIZE 0xFFFF
+
 /*
 Most of the informations about ICMP are from:
     - https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
@@ -54,7 +56,7 @@ typedef struct s_icmp_packet {
     uint16_t identifier;
     uint16_t sequence_number;
     uint32_t timestamp;
-    uint8_t data[56];
+    uint8_t data[MAX_SIZE];
     uint32_t size;
 } t_icmp_packet;
 
