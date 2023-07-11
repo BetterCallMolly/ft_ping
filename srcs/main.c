@@ -27,16 +27,16 @@ int main(int argc, char **argv) {
 
     // At this point, we have a valid IP address
     t_icmp_packet echo_request = {0};
-    echo_request.header.type = ECHO_REQUEST;
-    echo_request.header.code = 0;
+    echo_request.type = ECHO_REQUEST;
+    echo_request.code = 0;
 
     // Bytes 5-6 = identifier (random / can be set by user as long as it fits in 2 bytes)
     // Bytes 7-8 = sequence number (incremented by 1 for each packet sent)
 
     // Push our identifier in the packet
     uint16_t identifier = get_echo_identifier();
-    echo_request.header.rest[0] = (identifier >> 8) & 0xFF;
-    echo_request.header.rest[1] = identifier & 0xFF;
+    echo_request.rest[0] = (identifier >> 8) & 0xFF;
+    echo_request.rest[1] = identifier & 0xFF;
 
     // Generate a buffer of n bytes of data
     generate_data(echo_request.data, DEFAULT_DATA_SIZE);
@@ -48,13 +48,11 @@ int main(int argc, char **argv) {
     {
         // Push our sequence number in the packet
         uint16_t sequence_number = 0;
-        echo_request.header.rest[2] = (sequence_number >> 8) & 0xFF;
-        echo_request.header.rest[3] = sequence_number & 0xFF;
+        echo_request.rest[2] = (sequence_number >> 8) & 0xFF;
+        echo_request.rest[3] = sequence_number & 0xFF;
 
         // Push our timestamp in the packet
         echo_request.timestamp = get_timestamp(); // TODO: check if we need to convert to network byte order
-
-        compute_icmp_checksum(&echo_request);
     }
 
     disasm_icmp_packet(&echo_request, true);
@@ -82,16 +80,17 @@ int main(int argc, char **argv) {
     dest.sin_addr = sa.sin_addr;
     dest.sin_port = 0;
 
+    compute_icmp_checksum(&echo_request);
+
     // Serialize packet
     uint8_t *raw_packet = serialize_icmp_packet(&echo_request);
 
     // Send packet
-    ssize_t bytes_sent = sendto(sockfd, raw_packet, echo_request.size, 0, (struct sockaddr *)&dest, sizeof(dest));
+    ssize_t bytes_sent = sendto(sockfd, raw_packet, sizeof(echo_request) - 4, 0, (struct sockaddr *)&dest, sizeof(dest));
     if (bytes_sent < 0) {
         char *error = strerror(errno);
         fprintf(stderr, "ft_ping: sendto: %s\n", error);
         exit(1);
     }
-    free(raw_packet);
     printf("Sent %ld bytes\n", bytes_sent);
 }
