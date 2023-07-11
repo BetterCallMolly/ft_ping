@@ -87,4 +87,37 @@ int main(int argc, char **argv) {
         fprintf(stderr, "ft_ping: sendto: %s\n", error);
         exit(1);
     }
+
+    // Receive packet
+    #include <netinet/ip.h>
+    uint8_t buffer[IP_MAXPACKET];
+    ssize_t bytes_received = recvfrom(sockfd, buffer, IP_MAXPACKET, 0, NULL, NULL);
+    if (bytes_received < 0) {
+        char *error = strerror(errno);
+        fprintf(stderr, "ft_ping: recvmsg: %s\n", error);
+        exit(1);
+    }
+
+    uint8_t version = buffer[0] >> 4;
+    if (version != 4) {
+        fprintf(stderr, "ft_ping: recvmsg: Invalid IP version\n");
+        exit(1);
+    }
+
+    uint8_t header_length = buffer[0] & 0x0F;
+    if (header_length < 5) {
+        fprintf(stderr, "ft_ping: recvmsg: Invalid IP header length\n");
+        exit(1);
+    }
+
+    t_icmp_packet *icmp_packet = (t_icmp_packet *)(buffer + header_length * 4);
+
+    // swap endianness
+    icmp_packet->identifier = ntohs(icmp_packet->identifier);
+    icmp_packet->sequence_number = ntohs(icmp_packet->sequence_number);
+    icmp_packet->timestamp = ntohl(icmp_packet->timestamp);
+    icmp_packet->checksum = ntohs(icmp_packet->checksum);
+
+    disasm_icmp_packet(icmp_packet, false);
+    return (0);
 }
