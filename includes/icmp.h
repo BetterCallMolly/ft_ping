@@ -57,6 +57,7 @@ typedef struct s_icmp_packet {
     t_icmp_header header;
     uint32_t timestamp;
     uint8_t data[MAX_SIZE];
+    uint32_t size;
 } t_icmp_packet;
 
 bool compute_icmp_checksum(t_icmp_packet *packet);
@@ -67,6 +68,7 @@ int32_t checksum(uint8_t *buffer, uint32_t n);
 // Utils functions
 uint16_t get_echo_identifier(void);
 uint32_t get_timestamp(void);
+void generate_data(uint8_t *buffer, uint32_t size);
 
 // Debug functions
 void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data);
