@@ -26,4 +26,10 @@ int main(int argc, char **argv) {
     }
 
     // At this point, we have a valid IP address
+    t_icmp_packet echo_request = {0};
+    echo_request.header.type = ECHO_REQUEST;
+    echo_request.header.code = 0;
+    compute_icmp_checksum(&echo_request);
+
+    disasm_icmp_packet(&echo_request, false);
 }
