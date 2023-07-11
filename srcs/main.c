@@ -29,6 +29,20 @@ int main(int argc, char **argv) {
     t_icmp_packet echo_request = {0};
     echo_request.header.type = ECHO_REQUEST;
     echo_request.header.code = 0;
+
+    // Bytes 5-6 = identifier (random / can be set by user as long as it fits in 2 bytes)
+    // Bytes 7-8 = sequence number (incremented by 1 for each packet sent)
+
+    // Push our identifier in the packet
+    uint16_t identifier = get_echo_identifier();
+    echo_request.header.rest[0] = (identifier >> 8) & 0xFF;
+    echo_request.header.rest[1] = identifier & 0xFF;
+
+    // Push our sequence number in the packet
+    uint16_t sequence_number = 0;
+    echo_request.header.rest[2] = (sequence_number >> 8) & 0xFF;
+    echo_request.header.rest[3] = sequence_number & 0xFF;
+
     compute_icmp_checksum(&echo_request);
 
     disasm_icmp_packet(&echo_request, false);
