@@ -58,4 +58,40 @@ int main(int argc, char **argv) {
     }
 
     disasm_icmp_packet(&echo_request, true);
+
+    // Create a raw socket
+    int sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+    if (sockfd < 0) {
+        char *error = strerror(errno);
+        fprintf(stderr, "ft_ping: socket: %s\n", error);
+        exit(1);
+    }
+
+    // Set socket options
+    int ttl = 64;
+
+    // Set TTL
+    if (setsockopt(sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl)) < 0) {
+        char *error = strerror(errno);
+        fprintf(stderr, "ft_ping: setsockopt: %s\n", error);
+        exit(1);
+    }
+
+    struct sockaddr_in dest;
+    dest.sin_family = AF_INET;
+    dest.sin_addr = sa.sin_addr;
+    dest.sin_port = 0;
+
+    // Serialize packet
+    uint8_t *raw_packet = serialize_icmp_packet(&echo_request);
+
+    // Send packet
+    ssize_t bytes_sent = sendto(sockfd, raw_packet, echo_request.size, 0, (struct sockaddr *)&dest, sizeof(dest));
+    if (bytes_sent < 0) {
+        char *error = strerror(errno);
+        fprintf(stderr, "ft_ping: sendto: %s\n", error);
+        exit(1);
+    }
+    free(raw_packet);
+    printf("Sent %ld bytes\n", bytes_sent);
 }
