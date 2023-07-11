@@ -48,5 +48,5 @@ uint8_t *serialize_icmp_packet(t_icmp_packet *packet)
 {
     if (!packet)
         return NULL;
-    return (uint8_t *)&packet->checksum; // small hack to return the address of the first byte of the packet
+    return (uint8_t *)&packet->type; // small hack to return the address of the first byte of the packet
 }

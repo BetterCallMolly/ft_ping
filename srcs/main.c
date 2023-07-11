@@ -55,8 +55,6 @@ int main(int argc, char **argv) {
         echo_request.timestamp = get_timestamp(); // TODO: check if we need to convert to network byte order
     }
 
-    disasm_icmp_packet(&echo_request, true);
-
     // Create a raw socket
     int sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
     if (sockfd < 0) {
@@ -84,6 +82,12 @@ int main(int argc, char **argv) {
 
     // Serialize packet
     uint8_t *raw_packet = serialize_icmp_packet(&echo_request);
+
+    disasm_icmp_packet(&echo_request, true);
+
+    for (size_t i = 0; i < sizeof(echo_request) - 4; i++) {
+        printf("%02x ", raw_packet[i]);
+    }
 
     // Send packet
     ssize_t bytes_sent = sendto(sockfd, raw_packet, sizeof(echo_request) - 4, 0, (struct sockaddr *)&dest, sizeof(dest));
