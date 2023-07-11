@@ -16,16 +16,16 @@ bool compute_icmp_checksum(t_icmp_packet *packet)
 void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data)
 {
     printf("ICMP packet @ %p:\n", packet);
-    printf("    type: %02x\n", packet->header.type);
-    printf("    code: %02x\n", packet->header.code);
-    printf("    checksum: %04x\n", packet->header.checksum);
-    printf("    rest: %02x %02x %02x %02x\n", packet->header.rest[0], packet->header.rest[1], packet->header.rest[2], packet->header.rest[3]);
-    printf("    timestamp: %08x\n", packet->timestamp);
+    printf("    type: 0x%02x\n", packet->header.type);
+    printf("    code: 0x%02x\n", packet->header.code);
+    printf("    checksum: 0x%04x\n", packet->header.checksum);
+    printf("    rest: 0x%02x 0x%02x 0x%02x 0x%02x\n", packet->header.rest[0], packet->header.rest[1], packet->header.rest[2], packet->header.rest[3]);
+    printf("    timestamp: 0x%08x\n", packet->timestamp);
     if (!disasm_data)
         return ;
     printf("    data: ");
     for (size_t i = 0; i < MAX_SIZE; i++) {
-        printf("%02x ", packet->data[i]);
+        printf("0x%02x ", packet->data[i]);
     }
     printf("\n");
 }
