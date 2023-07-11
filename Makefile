@@ -8,6 +8,7 @@ SRCS := srcs/main.c \
 		srcs/icmp.c \
 		srcs/get_identifier.c \
 		srcs/get_timestamp.c \
+		srcs/generate_data.c \
 
 OBJS := $(SRCS:.c=.o)
 DEPS := $(SRCS:.c=.d)
