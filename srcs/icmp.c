@@ -11,16 +11,21 @@ bool compute_icmp_checksum(t_icmp_packet *packet)
 /**
  * @brief Debug function that prints the content of an ICMP packet to stderr
  * 
+ * @note This function asserts the passed packet is not NULL and that it's a ECHO_REQUEST / ECHO_REPLY packet
  * @param packet Packet to disassemble
  */
 void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data)
 {
+    if (!packet)
+        return ;
+    if (packet->header.type != ECHO_REQUEST && packet->header.type != ECHO_REPLY)
+        return ;
     printf("ICMP packet @ %p:\n", packet);
     printf("    type: 0x%02x\n", packet->header.type);
     printf("    code: 0x%02x\n", packet->header.code);
     printf("    checksum: 0x%04x\n", packet->header.checksum);
-    printf("    rest: 0x%02x 0x%02x 0x%02x 0x%02x\n", packet->header.rest[0], packet->header.rest[1], packet->header.rest[2], packet->header.rest[3]);
-    printf("    timestamp: 0x%08x\n", packet->timestamp);
+    printf("    identifier: 0x%02x 0x%02x\n", packet->header.rest[0], packet->header.rest[1]);
+    printf("    seq_number: 0x%02x 0x%02x\n", packet->header.rest[2], packet->header.rest[3]);
     if (!disasm_data)
         return ;
     printf("    data: ");
