@@ -6,6 +6,7 @@ NAME = ft_ping
 SRCS := srcs/main.c \
 		srcs/icmp_checksum.c \
 		srcs/icmp.c \
+		srcs/get_identifier.c \
 
 OBJS := $(SRCS:.c=.o)
 DEPS := $(SRCS:.c=.d)
