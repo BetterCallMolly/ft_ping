@@ -30,7 +30,7 @@ void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data)
     if (!disasm_data)
         return ;
     printf("    data: ");
-    for (size_t i = 0; i < MAX_SIZE; i++) {
+    for (size_t i = 0; i < packet->size; i++) {
         printf("0x%02x ", packet->data[i]);
     }
     printf("\n");
