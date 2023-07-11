@@ -38,15 +38,24 @@ int main(int argc, char **argv) {
     echo_request.header.rest[0] = (identifier >> 8) & 0xFF;
     echo_request.header.rest[1] = identifier & 0xFF;
 
-    // Push our sequence number in the packet
-    uint16_t sequence_number = 0;
-    echo_request.header.rest[2] = (sequence_number >> 8) & 0xFF;
-    echo_request.header.rest[3] = sequence_number & 0xFF;
+    // Generate a buffer of n bytes of data
+    generate_data(echo_request.data, DEFAULT_DATA_SIZE);
 
-    // Push our timestamp in the packet
-    echo_request.timestamp = get_timestamp(); // TODO: check if we need to convert to network byte order
+    // Set data length
+    echo_request.size = DEFAULT_DATA_SIZE;
 
-    compute_icmp_checksum(&echo_request);
+    // Surround the below block with a loop to send multiple packets (for now, we'll only send one)
+    {
+        // Push our sequence number in the packet
+        uint16_t sequence_number = 0;
+        echo_request.header.rest[2] = (sequence_number >> 8) & 0xFF;
+        echo_request.header.rest[3] = sequence_number & 0xFF;
 
-    disasm_icmp_packet(&echo_request, false);
+        // Push our timestamp in the packet
+        echo_request.timestamp = get_timestamp(); // TODO: check if we need to convert to network byte order
+
+        compute_icmp_checksum(&echo_request);
+    }
+
+    disasm_icmp_packet(&echo_request, true);
 }
