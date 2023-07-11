@@ -8,6 +8,15 @@
  */
 void generate_data(uint8_t *buffer, uint32_t size)
 {
+    if (!buffer)
+        return ;
+
+    if (size < 127*3) { // Fallback to a simple incrementing pattern to avoid memcpy overhead
+        for (uint32_t i = 0; i < size; i++) {
+            buffer[i] = i;
+        }
+    }
+
     static uint8_t ascii[127];
     static bool initialized = false;
     if (!initialized) {
