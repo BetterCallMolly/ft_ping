@@ -66,6 +66,7 @@ int32_t checksum(uint8_t *buffer, uint32_t n);
 
 // Utils functions
 uint16_t get_echo_identifier(void);
+uint32_t get_timestamp(void);
 
 // Debug functions
 void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data);

@@ -43,6 +43,9 @@ int main(int argc, char **argv) {
     echo_request.header.rest[2] = (sequence_number >> 8) & 0xFF;
     echo_request.header.rest[3] = sequence_number & 0xFF;
 
+    // Push our timestamp in the packet
+    echo_request.timestamp = get_timestamp(); // TODO: check if we need to convert to network byte order
+
     compute_icmp_checksum(&echo_request);
 
     disasm_icmp_packet(&echo_request, false);
