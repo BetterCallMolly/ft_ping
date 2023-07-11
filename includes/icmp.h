@@ -46,19 +46,16 @@ typedef enum e_icmp_types {
 } t_icmp_types;
 
 // https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Header
-typedef struct s_icmp_header {
+
+#define MAX_SIZE
+
+typedef struct s_icmp_packet {
     t_icmp_types type;
     uint8_t code;
     uint16_t checksum;
     uint8_t rest[4];
-} t_icmp_header;
-
-#define MAX_SIZE 0xFFFF - (sizeof(t_icmp_header) + sizeof(uint32_t) + 1)
-
-typedef struct s_icmp_packet {
-    t_icmp_header header;
     uint32_t timestamp;
-    uint8_t data[MAX_SIZE];
+    uint8_t data[96];
     uint32_t size;
 } t_icmp_packet;
 
