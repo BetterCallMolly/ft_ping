@@ -55,6 +55,7 @@ typedef struct s_icmp_header {
 
 typedef struct s_icmp_packet {
     t_icmp_header header;
+    uint32_t timestamp;
     uint8_t data[MAX_SIZE];
 } t_icmp_packet;
 

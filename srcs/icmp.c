@@ -26,6 +26,7 @@ void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data)
     printf("    checksum: 0x%04x\n", packet->header.checksum);
     printf("    identifier: 0x%02x 0x%02x\n", packet->header.rest[0], packet->header.rest[1]);
     printf("    seq_number: 0x%02x 0x%02x\n", packet->header.rest[2], packet->header.rest[3]);
+    printf("    timestamp: 0x%08x\n", packet->timestamp);
     if (!disasm_data)
         return ;
     printf("    data: ");
