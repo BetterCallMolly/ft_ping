@@ -23,4 +23,4 @@ https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
 
 ## Other
 
-(Charles M. Kozierok's TCP/IP Guide)[http://www.tcpipguide.com/free/t_ICMPv4EchoRequestandEchoReplyMessages-2.htm]
+[Charles M. Kozierok's TCP/IP Guide](http://www.tcpipguide.com/free/t_ICMPv4EchoRequestandEchoReplyMessages-2.htm)
