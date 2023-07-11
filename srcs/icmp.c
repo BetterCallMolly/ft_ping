@@ -35,3 +35,21 @@ void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data)
     }
     printf("\n");
 }
+
+/**
+ * @brief Converts an ICMP packet to a byte array
+ * 
+ * @param packet Packet to serialize
+ * @return uint8_t* Serialized packet, which is allocated on the heap
+ * @note The returned pointer must be freed by the caller
+ */
+uint8_t *serialize_icmp_packet(t_icmp_packet *packet)
+{
+    if (!packet)
+        return NULL;
+    uint8_t *buffer = malloc(sizeof(t_icmp_header) + (sizeof(uint32_t) * 2) + packet->size);
+    if (!buffer)
+        return NULL;
+    memcpy(buffer, packet, sizeof(t_icmp_packet));
+    return buffer;
+}

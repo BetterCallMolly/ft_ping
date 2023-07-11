@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
 
 /*
 Most of the informations about ICMP are from:
@@ -61,7 +63,7 @@ typedef struct s_icmp_packet {
 } t_icmp_packet;
 
 bool compute_icmp_checksum(t_icmp_packet *packet);
-char *serialize_icmp_packet(t_icmp_packet *packet);
+uint8_t *serialize_icmp_packet(t_icmp_packet *packet);
 t_icmp_packet *deserialize_icmp_packet(char *packet);
 int32_t checksum(uint8_t *buffer, uint32_t n);
 
