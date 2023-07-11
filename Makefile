@@ -1,9 +1,12 @@
 CC = gcc
 INCLUDES = -I./includes
-CFLAGS = -Wall -Wextra -Werror -g3 -MMD $(INCLUDES)
+CFLAGS = -Wall -Wextra -Werror -g3 -MMD $(INCLUDES) -fshort-enums
 NAME = ft_ping
 
-SRCS := srcs/main.c
+SRCS := srcs/main.c \
+		srcs/icmp_checksum.c \
+		srcs/icmp.c \
+
 OBJS := $(SRCS:.c=.o)
 DEPS := $(SRCS:.c=.d)
 
@@ -24,5 +27,8 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+scan-build: clean
+	scan-build make
 
 .PHONY: all clean fclean re
