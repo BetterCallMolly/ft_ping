@@ -1,3 +1,7 @@
+# Note
+
+Currently WIP
+
 # Useful resources
 
 ## RFCs
