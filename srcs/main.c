@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
         echo_request.sequence_number = sequence_number;
 
         // Push our timestamp in the packet
-        echo_request.timestamp = get_timestamp(); // TODO: check if we need to convert to network byte order
+        echo_request.timestamp = get_timestamp();
     }
 
     // Create a raw socket
@@ -118,6 +118,8 @@ int main(int argc, char **argv) {
     icmp_packet->timestamp = ntohl(icmp_packet->timestamp);
     icmp_packet->checksum = ntohs(icmp_packet->checksum);
 
-    disasm_icmp_packet(icmp_packet, false);
+    // disasm_icmp_packet(icmp_packet, false);
+
+    printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", bytes_received, argv[1], icmp_packet->sequence_number, ttl, get_timestamp() - icmp_packet->timestamp);
     return (0);
 }
