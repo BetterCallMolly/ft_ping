@@ -51,7 +51,8 @@ typedef struct s_icmp_packet {
     t_icmp_types type;
     uint8_t code;
     uint16_t checksum;
-    uint8_t rest[4];
+    uint16_t identifier;
+    uint16_t sequence_number;
     uint32_t timestamp;
     uint8_t data[56];
     uint32_t size;

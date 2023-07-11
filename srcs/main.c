@@ -34,9 +34,7 @@ int main(int argc, char **argv) {
     // Bytes 7-8 = sequence number (incremented by 1 for each packet sent)
 
     // Push our identifier in the packet
-    uint16_t identifier = get_echo_identifier();
-    echo_request.rest[0] = (identifier >> 8) & 0xFF;
-    echo_request.rest[1] = identifier & 0xFF;
+    echo_request.identifier = get_echo_identifier();
 
     // Generate a buffer of n bytes of data
     generate_data(echo_request.data, DEFAULT_DATA_SIZE);
@@ -48,8 +46,7 @@ int main(int argc, char **argv) {
     {
         // Push our sequence number in the packet
         uint16_t sequence_number = 0;
-        echo_request.rest[2] = (sequence_number >> 8) & 0xFF;
-        echo_request.rest[3] = sequence_number & 0xFF;
+        echo_request.sequence_number = sequence_number;
 
         // Push our timestamp in the packet
         echo_request.timestamp = get_timestamp(); // TODO: check if we need to convert to network byte order
