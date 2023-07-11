@@ -2,6 +2,23 @@
 
 Currently WIP
 
+# Roadmap
+
+## Working
+
+- [x] ICMP echo request sending
+- [x] ICMP echo reply receiving (and parsing)
+
+## TODO
+
+- [ ] Checksum (re)calculation
+- [ ] Verification of ICMP version & other frame data
+- [ ] Collect the correct `ttl`
+- [ ] Get the correct response time
+- [ ] Setup `alarm()` & `signal` handler to timeout pings
+- [ ] Use `usleep` to not spam the network
+- [ ] Clean the code before implementing fancy stuff
+
 # Useful resources
 
 ## RFCs
