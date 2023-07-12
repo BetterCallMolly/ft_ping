@@ -5,7 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_SIZE 0xFFFF
+#define ICMP4_FRAME_SIZE 20
+#define MAX_RECV_SIZE 0xFFFF + ICMP4_FRAME_SIZE
 
 /*
 Most of the informations about ICMP are from:
@@ -56,7 +57,7 @@ typedef struct s_icmp_packet {
     uint16_t identifier;
     uint16_t sequence_number;
     uint32_t timestamp;
-    uint8_t data[MAX_SIZE];
+    uint8_t data[MAX_RECV_SIZE];
     uint32_t size;
 } t_icmp_packet;
 
