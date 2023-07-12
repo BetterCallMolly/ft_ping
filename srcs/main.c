@@ -72,6 +72,7 @@ int main(int argc, char **argv) {
     // Surround the below block with a loop to send multiple packets (for now, we'll only send one);
     while (1) {
         // Push our timestamp in the packet
+        echo_request.checksum = 0;
         compute_icmp_checksum(&echo_request);
 
         // Serialize packet
