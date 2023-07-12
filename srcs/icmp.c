@@ -5,6 +5,7 @@ bool compute_icmp_checksum(t_icmp_packet *packet)
 {
     if (!packet)
         return false;
+    printf("computing checksum of %ld bytes\n", EMPTY_PACKET_SIZE + packet->size);
     packet->checksum = checksum(serialize_icmp_packet(packet), EMPTY_PACKET_SIZE + packet->size);
     return packet->checksum != 0;
 }
@@ -27,7 +28,6 @@ void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data)
     printf("    checksum: 0x%04x\n", packet->checksum);
     printf("    identifier: 0x%04x\n", packet->identifier);
     printf("    seq_number: 0x%04x\n", packet->sequence_number);
-    printf("    timestamp: 0x%08x\n", packet->timestamp);
     if (!disasm_data)
         return ;
     printf("    data: ");

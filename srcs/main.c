@@ -131,8 +131,6 @@ int main(int argc, char **argv) {
         // Copy the ICMP packet into our response_packet struct
         memcpy(&response_packet, buffer + ICMP4_FRAME_SIZE, bytes_received - ICMP4_FRAME_SIZE);
 
-        disasm_icmp_packet(&response_packet, false);
-
         // swap endianness
         response_packet.identifier = ntohs(response_packet.identifier);
         response_packet.checksum = ntohs(response_packet.checksum);
@@ -150,7 +148,7 @@ int main(int argc, char **argv) {
             // Allow the program to continue, having a checksum mismatch is not a fatal error but it must be reported
         }
         puts("");
-        printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", bytes_received, argv[1], response_packet.sequence_number, ttl, get_timestamp() - response_packet.timestamp);
+        printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", bytes_received, argv[1], response_packet.sequence_number, ttl, get_timestamp() - get_timestamp());
         usleep(DEFAULT_MIN_DELAY);
         echo_request.sequence_number++;
     }
