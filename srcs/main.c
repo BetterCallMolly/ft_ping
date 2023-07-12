@@ -69,6 +69,7 @@ int main(int argc, char **argv) {
     const size_t send_size = EMPTY_PACKET_SIZE + echo_request.size;
     const size_t receive_size = ICMP4_FRAME_SIZE + EMPTY_PACKET_SIZE + echo_request.size;
 
+    printf("PING %s (%s) %d bytes of data.\n", argv[1], inet_ntoa(sa.sin_addr), DEFAULT_DATA_SIZE);
     // Surround the below block with a loop to send multiple packets (for now, we'll only send one);
     while (1) {
         // Push our timestamp in the packet
