@@ -8,6 +8,7 @@ Currently WIP
 
 - [x] ICMP echo request sending
 - [x] ICMP echo reply receiving (and parsing)
+- [x] Use `usleep` to not spam the network
 
 ## TODO
 
@@ -16,7 +17,6 @@ Currently WIP
 - [ ] Collect the correct `ttl`
 - [ ] Get the correct response time
 - [ ] Setup `alarm()` & `signal` handler to timeout pings
-- [ ] Use `usleep` to not spam the network
 - [ ] Clean the code before implementing fancy stuff
 
 # Useful resources
