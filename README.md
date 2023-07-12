@@ -9,10 +9,10 @@ Currently WIP
 - [x] ICMP echo request sending
 - [x] ICMP echo reply receiving (and parsing)
 - [x] Use `usleep` to not spam the network
+- [x] Checksum (re)calculation
 
 ## TODO
 
-- [ ] Checksum (re)calculation
 - [ ] Verification of ICMP version & other frame data
 - [ ] Collect the correct `ttl`
 - [ ] Get the correct response time

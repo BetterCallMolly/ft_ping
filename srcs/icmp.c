@@ -5,7 +5,6 @@ bool compute_icmp_checksum(t_icmp_packet *packet)
 {
     if (!packet)
         return false;
-    printf("computing checksum of %ld bytes\n", EMPTY_PACKET_SIZE + packet->size);
     packet->checksum = checksum(serialize_icmp_packet(packet), EMPTY_PACKET_SIZE + packet->size);
     return packet->checksum != 0;
 }
