@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "ft_ping: warning: remote host returned an invalid checksum (got: %d, expected: %d)\n", received_checksum, response_packet.checksum);
             // Allow the program to continue, having a checksum mismatch is not a fatal error but it must be reported
         }
-        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", response_packet.size, argv[1], response_packet.sequence_number, ttl, get_timestamp() - before);
+        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", response_packet.size, argv[1], response_packet.sequence_number, ttl, (get_timestamp() - before) / 1000.0);
         usleep(DEFAULT_MIN_DELAY);
         echo_request.sequence_number++;
     }

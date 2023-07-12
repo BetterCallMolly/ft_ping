@@ -11,14 +11,15 @@ Currently WIP
 - [x] Use `usleep` to not spam the network
 - [x] Checksum (re)calculation
 - [x] Get the correct data size for the logging
+- [x] Get the correct response time
 
 ## TODO
 
 - [ ] Verification of ICMP version & other frame data
 - [ ] Collect the correct `ttl`
-- [ ] Get the correct response time
 - [ ] Setup `alarm()` & `signal` handler to timeout pings
 - [ ] Clean the code before implementing fancy stuff
+- [ ] Fix response time's inaccuracy
 
 # Useful resources
 
