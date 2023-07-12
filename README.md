@@ -10,6 +10,7 @@ Currently WIP
 - [x] ICMP echo reply receiving (and parsing)
 - [x] Use `usleep` to not spam the network
 - [x] Checksum (re)calculation
+- [x] Get the correct data size for the logging
 
 ## TODO
 

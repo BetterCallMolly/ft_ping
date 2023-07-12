@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
         // Copy the ICMP packet into our response_packet struct
         memcpy(&response_packet, buffer + ICMP4_FRAME_SIZE, bytes_received - ICMP4_FRAME_SIZE);
 
-        response_packet.size = bytes_received - ICMP4_FRAME_SIZE - EMPTY_PACKET_SIZE;
+        response_packet.size = bytes_received - ICMP4_FRAME_SIZE - 1;
 
         uint16_t received_checksum = response_packet.checksum;
         response_packet.checksum = 0;
@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "ft_ping: warning: remote host returned an invalid checksum (got: %d, expected: %d)\n", received_checksum, response_packet.checksum);
             // Allow the program to continue, having a checksum mismatch is not a fatal error but it must be reported
         }
-        printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", bytes_received, argv[1], response_packet.sequence_number, ttl, get_timestamp() - get_timestamp());
+        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", response_packet.size, argv[1], response_packet.sequence_number, ttl, get_timestamp() - get_timestamp());
         usleep(DEFAULT_MIN_DELAY);
         echo_request.sequence_number++;
     }
