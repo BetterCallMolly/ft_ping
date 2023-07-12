@@ -20,8 +20,8 @@ void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data)
 {
     if (!packet)
         return ;
-    // if (packet->type != ECHO_REQUEST && packet->type != ECHO_REPLY)
-    //     return ;
+    if (packet->type != ECHO_REQUEST && packet->type != ECHO_REPLY)
+        return ;
     printf("ICMP packet @ %p:\n", packet);
     printf("    type: 0x%02x\n", packet->type);
     printf("    code: 0x%02x\n", packet->code);
