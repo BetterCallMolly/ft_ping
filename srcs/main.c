@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
     const size_t send_size = EMPTY_PACKET_SIZE + echo_request.size;
     const size_t receive_size = ICMP4_FRAME_SIZE + EMPTY_PACKET_SIZE + echo_request.size;
 
-    printf("PING %s (%s) %d bytes of data.\n", argv[1], inet_ntoa(sa.sin_addr), DEFAULT_DATA_SIZE);
+    printf("PING %s (%s): %d data bytes.\n", argv[1], inet_ntoa(sa.sin_addr), DEFAULT_DATA_SIZE);
     // Surround the below block with a loop to send multiple packets (for now, we'll only send one);
     while (1) {
         // Push our timestamp in the packet
@@ -79,6 +79,7 @@ int main(int argc, char **argv) {
         // Serialize packet
         uint8_t *raw_packet = serialize_icmp_packet(&echo_request);
 
+        float before = get_timestamp();
         // Send packet
         ssize_t bytes_sent = sendto(
             sockfd,
@@ -130,7 +131,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "ft_ping: warning: remote host returned an invalid checksum (got: %d, expected: %d)\n", received_checksum, response_packet.checksum);
             // Allow the program to continue, having a checksum mismatch is not a fatal error but it must be reported
         }
-        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", response_packet.size, argv[1], response_packet.sequence_number, ttl, get_timestamp() - get_timestamp());
+        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", response_packet.size, argv[1], response_packet.sequence_number, ttl, get_timestamp() - before);
         usleep(DEFAULT_MIN_DELAY);
         echo_request.sequence_number++;
     }
