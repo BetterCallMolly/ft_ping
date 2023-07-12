@@ -4,7 +4,6 @@
 bool compute_icmp_checksum(t_icmp_packet *packet)
 {
     if (!packet)
-    
         return false;
     packet->checksum = checksum(serialize_icmp_packet(packet), sizeof(t_icmp_packet) - 4);
     return packet->checksum != 0;
