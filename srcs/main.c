@@ -75,7 +75,6 @@ int main(int argc, char **argv) {
         // Push our timestamp in the packet
         echo_request.timestamp = get_timestamp();
     
-
         compute_icmp_checksum(&echo_request);
 
         // Serialize packet
@@ -95,7 +94,6 @@ int main(int argc, char **argv) {
         }
 
         // Receive packet
-        #include <netinet/ip.h>
         uint8_t buffer[IP_MAXPACKET];
         ssize_t bytes_received = recvfrom(sockfd, buffer, IP_MAXPACKET, 0, NULL, NULL);
         if (bytes_received < 0) {

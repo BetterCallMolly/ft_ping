@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <netinet/ip.h>
 #include "icmp.h"
 
 #ifndef DEFAULT_DATA_SIZE
