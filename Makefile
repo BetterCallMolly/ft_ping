@@ -1,6 +1,6 @@
 CC = gcc
 INCLUDES = -I./includes
-CFLAGS = -Wall -Wextra -Werror -g3 -MMD $(INCLUDES) -fshort-enums
+CFLAGS = -Wall -Wextra -Werror -g3 -MMD $(INCLUDES) -fshort-enums -fsanitize=address
 NAME = ft_ping
 
 SRCS := srcs/main.c \
