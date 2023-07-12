@@ -66,12 +66,8 @@ int main(int argc, char **argv) {
     dest.sin_addr = sa.sin_addr;
     dest.sin_port = 0;
 
-    // Surround the below block with a loop to send multiple packets (for now, we'll only send one)
+    // Surround the below block with a loop to send multiple packets (for now, we'll only send one);
     while (1) {
-        // Push our sequence number in the packet
-        uint16_t sequence_number = 0;
-        echo_request.sequence_number = sequence_number;
-
         // Push our timestamp in the packet
         echo_request.timestamp = get_timestamp();
     
@@ -118,14 +114,25 @@ int main(int argc, char **argv) {
 
         // swap endianness
         icmp_packet->identifier = ntohs(icmp_packet->identifier);
-        icmp_packet->sequence_number = ntohs(icmp_packet->sequence_number);
         icmp_packet->timestamp = ntohl(icmp_packet->timestamp);
         icmp_packet->checksum = ntohs(icmp_packet->checksum);
 
-        // disasm_icmp_packet(icmp_packet, false);
+        uint16_t received_checksum = icmp_packet->checksum;
+        icmp_packet->checksum = 0;
+        compute_icmp_checksum(icmp_packet);
 
+        if (received_checksum != icmp_packet->checksum) {
+            fprintf(stderr, "ft_ping: warning: remote host returned an invalid checksum (got: %d, expected: %d)\n", received_checksum, icmp_packet->checksum);
+            // Allow the program to continue, having a checksum mismatch is not a fatal error but it must be reported
+        }
+        // disasm_icmp_packet(icmp_packet, false);
+        for (ssize_t i = header_length * 4; i < bytes_received; i++) {
+            printf("%02x ", buffer[i]);
+        }
+        puts("");
         printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", bytes_received, argv[1], icmp_packet->sequence_number, ttl, get_timestamp() - icmp_packet->timestamp);
         usleep(DEFAULT_MIN_DELAY);
+        echo_request.sequence_number++;
     }
     return (0);
 }
