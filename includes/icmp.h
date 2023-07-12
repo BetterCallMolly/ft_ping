@@ -6,7 +6,9 @@
 #include <stdlib.h>
 
 #define ICMP4_FRAME_SIZE 20
+#define ICMP4_HEADER_SIZE 8
 #define MAX_RECV_SIZE 0xFFFF + ICMP4_FRAME_SIZE
+#define EMPTY_PACKET_SIZE 1 + sizeof(uint8_t) * 2 + sizeof(uint16_t) * 3 + sizeof(uint32_t)
 
 /*
 Most of the informations about ICMP are from:

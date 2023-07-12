@@ -66,20 +66,22 @@ int main(int argc, char **argv) {
     dest.sin_addr = sa.sin_addr;
     dest.sin_port = 0;
 
+    const size_t send_size = EMPTY_PACKET_SIZE + echo_request.size;
+    const size_t receive_size = ICMP4_FRAME_SIZE + EMPTY_PACKET_SIZE + echo_request.size;
+
     // Surround the below block with a loop to send multiple packets (for now, we'll only send one);
     while (1) {
         // Push our timestamp in the packet
-        echo_request.timestamp = get_timestamp();
-    
         compute_icmp_checksum(&echo_request);
 
         // Serialize packet
         uint8_t *raw_packet = serialize_icmp_packet(&echo_request);
 
         // Send packet
-        ssize_t bytes_sent = sendto(sockfd,
+        ssize_t bytes_sent = sendto(
+            sockfd,
             raw_packet,
-            sizeof(echo_request) - 4 - MAX_RECV_SIZE + echo_request.size,
+            send_size,
             0,
             (struct sockaddr *)&dest, sizeof(dest)
         );
@@ -91,7 +93,7 @@ int main(int argc, char **argv) {
 
         // Receive packet
         uint8_t buffer[IP_MAXPACKET];
-        ssize_t bytes_received = recvfrom(sockfd, buffer, IP_MAXPACKET, 0, NULL, NULL);
+        ssize_t bytes_received = recvfrom(sockfd, buffer, receive_size, 0, NULL, NULL);
         if (bytes_received < 0) {
             char *error = strerror(errno);
             fprintf(stderr, "ft_ping: recvmsg: %s\n", error);
@@ -110,27 +112,44 @@ int main(int argc, char **argv) {
             exit(1);
         }
 
-        t_icmp_packet *icmp_packet = (t_icmp_packet *)(buffer + header_length * 4);
-
-        // swap endianness
-        icmp_packet->identifier = ntohs(icmp_packet->identifier);
-        icmp_packet->timestamp = ntohl(icmp_packet->timestamp);
-        icmp_packet->checksum = ntohs(icmp_packet->checksum);
-
-        uint16_t received_checksum = icmp_packet->checksum;
-        icmp_packet->checksum = 0;
-        compute_icmp_checksum(icmp_packet);
-
-        if (received_checksum != icmp_packet->checksum) {
-            fprintf(stderr, "ft_ping: warning: remote host returned an invalid checksum (got: %d, expected: %d)\n", received_checksum, icmp_packet->checksum);
-            // Allow the program to continue, having a checksum mismatch is not a fatal error but it must be reported
-        }
-        // disasm_icmp_packet(icmp_packet, false);
-        for (ssize_t i = header_length * 4; i < bytes_received; i++) {
-            printf("%02x ", buffer[i]);
+        // Print all received bytes
+        for (ssize_t i = 0; i < bytes_received; i++) {
+            if (i < ICMP4_FRAME_SIZE) {
+                printf("\033[0;31m%02x ", buffer[i]);
+            } else if (i - ICMP4_FRAME_SIZE < ICMP4_HEADER_SIZE) {
+                printf("\033[0;33m%02x ", buffer[i]);
+            } else {
+                printf("\033[0;32m%02x ", buffer[i]);
+            }
+            printf("\033[0m");
         }
         puts("");
-        printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", bytes_received, argv[1], icmp_packet->sequence_number, ttl, get_timestamp() - icmp_packet->timestamp);
+
+        t_icmp_packet response_packet;
+
+        // Copy the ICMP packet into our response_packet struct
+        memcpy(&response_packet, buffer + ICMP4_FRAME_SIZE, bytes_received - ICMP4_FRAME_SIZE);
+
+        disasm_icmp_packet(&response_packet, false);
+
+        // swap endianness
+        response_packet.identifier = ntohs(response_packet.identifier);
+        response_packet.checksum = ntohs(response_packet.checksum);
+        response_packet.size = bytes_received - ICMP4_FRAME_SIZE - EMPTY_PACKET_SIZE;
+
+        uint16_t received_checksum = response_packet.checksum;
+        response_packet.checksum = 0;
+
+        compute_icmp_checksum(&response_packet);
+    
+        disasm_icmp_packet(&response_packet, false);
+
+        if (received_checksum != response_packet.checksum) {
+            fprintf(stderr, "ft_ping: warning: remote host returned an invalid checksum (got: %d, expected: %d)\n", received_checksum, response_packet.checksum);
+            // Allow the program to continue, having a checksum mismatch is not a fatal error but it must be reported
+        }
+        puts("");
+        printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%d ms\n", bytes_received, argv[1], response_packet.sequence_number, ttl, get_timestamp() - response_packet.timestamp);
         usleep(DEFAULT_MIN_DELAY);
         echo_request.sequence_number++;
     }
