@@ -11,11 +11,12 @@ void sigint_handler(int signum) {
         (float) (g_summary.lost / g_summary.sent * 100)
     );
     float avg_delay = avg(&g_summary);
+    float standard_dev = stddev(&g_summary, avg_delay);
     printf("round-trip min/avg/max/stddev = %.3f/%.3f/%.3f/%.3f ms\n", 
-        g_summary.min_delay,
-        avg_delay,
+        (g_summary.min_delay == 2147483647) ? 0 : g_summary.min_delay,
+        (avg_delay != avg_delay) ? 0 : avg_delay,
         g_summary.max_delay,
-        stddev(&g_summary, avg_delay)
+        (standard_dev != standard_dev) ? 0 : standard_dev
     );
     exit(0);
 }
