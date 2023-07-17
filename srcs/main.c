@@ -1,5 +1,31 @@
 #include "ft_ping.h"
 
+static t_summary g_summary = {0};
+
+void sigint_handler(int signum) {
+    (void) signum;
+    printf("--- %s ping statistics ---\n", g_summary.HOST_NAME);
+    printf("%d packets transmitted, %d received, %.2f%% packet loss\n",
+        g_summary.sent,
+        g_summary.received,
+        (float) (g_summary.lost / g_summary.sent * 100)
+    );
+    float avg_delay = avg(&g_summary);
+    printf("round-trip min/avg/max/stddev = %.3f/%.3f/%.3f/%.3f ms\n", 
+        g_summary.min_delay,
+        avg_delay,
+        g_summary.max_delay,
+        stddev(&g_summary, avg_delay)
+    );
+    exit(0);
+}
+
+void init_summary(char *arg) {
+    strncpy(g_summary.HOST_NAME, arg, MAX_ARG_SIZE);
+    g_summary.min_delay = 2147483647;
+    g_summary.max_delay = 0;
+}
+
 int main(int argc, char **argv) {
     if (argc == 1) {
         fprintf(stderr, "ft_ping: missing host operand\n");
@@ -41,6 +67,10 @@ int main(int argc, char **argv) {
 
     // Set data length
     echo_request.size = DEFAULT_DATA_SIZE;
+
+    // Setup signal handlers
+    init_summary(argv[1]);
+    signal(SIGINT, sigint_handler);
 
     // Create a raw socket
     int sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
@@ -93,6 +123,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "ft_ping: sendto: %s\n", error);
             exit(1);
         }
+        g_summary.sent++;
 
         // Receive packet
         uint8_t buffer[IP_MAXPACKET];
@@ -102,7 +133,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "ft_ping: recvmsg: %s\n", error);
             exit(1);
         }
-
+        g_summary.received++;
         uint8_t version = buffer[0] >> 4;
         if (version != 4) {
             fprintf(stderr, "ft_ping: recvmsg: Invalid IP version\n");
@@ -131,7 +162,15 @@ int main(int argc, char **argv) {
             fprintf(stderr, "ft_ping: warning: remote host returned an invalid checksum (got: %d, expected: %d)\n", received_checksum, response_packet.checksum);
             // Allow the program to continue, having a checksum mismatch is not a fatal error but it must be reported
         }
-        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", response_packet.size, argv[1], response_packet.sequence_number, ttl, (get_timestamp() - before) / 1000.0);
+        float response_time = (get_timestamp() - before) / 1000.0;
+        g_summary.delays[g_summary.received - 1] = response_time;
+        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", response_packet.size, argv[1], response_packet.sequence_number, ttl, response_time);
+        if (response_time < g_summary.min_delay) {
+            g_summary.min_delay = response_time;
+        }
+        if (response_time > g_summary.max_delay) {
+            g_summary.max_delay = response_time;
+        }
         usleep(DEFAULT_MIN_DELAY);
         echo_request.sequence_number++;
     }
