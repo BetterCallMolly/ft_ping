@@ -1,6 +1,6 @@
 CC = gcc
 INCLUDES = -I./includes
-CFLAGS = -Wall -Wextra -Werror -g3 -MMD $(INCLUDES) -fshort-enums -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -MMD $(INCLUDES) -lm -fshort-enums -fsanitize=address
 NAME = ft_ping
 
 SRCS := srcs/main.c \
@@ -9,6 +9,7 @@ SRCS := srcs/main.c \
 		srcs/get_identifier.c \
 		srcs/get_timestamp.c \
 		srcs/generate_data.c \
+		srcs/stats.c \
 
 OBJS := $(SRCS:.c=.o)
 DEPS := $(SRCS:.c=.d)
