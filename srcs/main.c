@@ -22,7 +22,7 @@ void sigint_handler(int signum) {
 
 void ping_timeout(int signum) {
     (void) signum;
-    dprintf(STDERR_FILENO, "No response from %s\n", g_summary.HOST_NAME);
+    // dprintf(STDERR_FILENO, "No response from %s\n", g_summary.HOST_NAME);
     g_summary.lost++;
 }
 
