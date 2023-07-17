@@ -15,6 +15,7 @@ Currently WIP
 
 ## TODO
 
+- [ ] CTRL+C summary
 - [ ] Verification of ICMP version & other frame data
 - [ ] Collect the correct `ttl`
 - [ ] Setup `alarm()` & `signal` handler to timeout pings
