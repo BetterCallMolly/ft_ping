@@ -12,10 +12,10 @@ Currently WIP
 - [x] Checksum (re)calculation
 - [x] Get the correct data size for the logging
 - [x] Get the correct response time
+- [x] CTRL+C summary
 
 ## TODO
 
-- [ ] CTRL+C summary
 - [ ] Verification of ICMP version & other frame data
 - [ ] Collect the correct `ttl`
 - [ ] Setup `alarm()` & `signal` handler to timeout pings
