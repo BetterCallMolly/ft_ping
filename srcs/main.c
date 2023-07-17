@@ -146,6 +146,8 @@ int main(int argc, char **argv) {
             exit(1);
         }
 
+        uint8_t recv_ttl = buffer[8];
+
         t_icmp_packet response_packet;
 
         // Copy the ICMP packet into our response_packet struct
@@ -164,7 +166,7 @@ int main(int argc, char **argv) {
         }
         float response_time = (get_timestamp() - before) / 1000.0;
         g_summary.delays[g_summary.received - 1] = response_time;
-        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", response_packet.size, argv[1], response_packet.sequence_number, ttl, response_time);
+        printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n", response_packet.size, argv[1], response_packet.sequence_number, recv_ttl, response_time);
         if (response_time < g_summary.min_delay) {
             g_summary.min_delay = response_time;
         }
