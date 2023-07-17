@@ -15,11 +15,11 @@ Currently WIP
 - [x] CTRL+C summary
 - [X] Collect the correct `ttl`
 - [x] Fix response time's inaccuracy
+- [x] Setup `alarm()` & `signal` handler to timeout pings
 
 ## TODO
 
 - [ ] Verification of ICMP version & other frame data
-- [ ] Setup `alarm()` & `signal` handler to timeout pings
 - [ ] Clean the code before implementing fancy stuff
 
 # Useful resources

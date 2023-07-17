@@ -20,6 +20,12 @@ void sigint_handler(int signum) {
     exit(0);
 }
 
+void ping_timeout(int signum) {
+    (void) signum;
+    dprintf(STDERR_FILENO, "No response from %s\n", g_summary.HOST_NAME);
+    g_summary.lost++;
+}
+
 void init_summary(char *arg) {
     strncpy(g_summary.HOST_NAME, arg, MAX_ARG_SIZE);
     g_summary.min_delay = 2147483647;
@@ -71,6 +77,7 @@ int main(int argc, char **argv) {
     // Setup signal handlers
     init_summary(argv[1]);
     signal(SIGINT, sigint_handler);
+    signal(SIGALRM, ping_timeout);
 
     // Create a raw socket
     int sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
@@ -125,6 +132,7 @@ int main(int argc, char **argv) {
         }
         g_summary.sent++;
 
+        alarm(DEFAULT_TIMEOUT);
         // Receive packet
         uint8_t buffer[IP_MAXPACKET];
         ssize_t bytes_received = recvfrom(sockfd, buffer, receive_size, 0, NULL, NULL);
@@ -133,6 +141,8 @@ int main(int argc, char **argv) {
             fprintf(stderr, "ft_ping: recvmsg: %s\n", error);
             exit(1);
         }
+        alarm(0);
+
         g_summary.received++;
         uint8_t version = buffer[0] >> 4;
         if (version != 4) {

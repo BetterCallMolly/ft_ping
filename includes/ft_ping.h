@@ -28,6 +28,10 @@
     #define MAX_SAMPLE_SIZE 1000 // over is just stupid
 #endif
 
+#ifndef DEFAULT_TIMEOUT
+    #define DEFAULT_TIMEOUT 3 // 3 seconds
+#endif
+
 typedef struct s_summary {
     char HOST_NAME[MAX_ARG_SIZE];
     uint32_t sent;
