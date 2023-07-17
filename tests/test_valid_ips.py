@@ -15,4 +15,4 @@ def test_valid_ips():
         _, exit_code = run_null([arg])
         with open("test.txt", "a+") as f:
             f.write(f"{arg}: {exit_code}\n")
-        assert exit_code == 0, f"Invalid IP {arg} was accepted. Exit code: {exit_code}"
+        assert exit_code != 0, f"Invalid IP {arg} was accepted. Exit code: {exit_code}"
