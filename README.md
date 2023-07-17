@@ -14,13 +14,13 @@ Currently WIP
 - [x] Get the correct response time
 - [x] CTRL+C summary
 - [X] Collect the correct `ttl`
+- [x] Fix response time's inaccuracy
 
 ## TODO
 
 - [ ] Verification of ICMP version & other frame data
 - [ ] Setup `alarm()` & `signal` handler to timeout pings
 - [ ] Clean the code before implementing fancy stuff
-- [ ] Fix response time's inaccuracy
 
 # Useful resources
 
