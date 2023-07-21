@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <netinet/ip.h>
 #include <signal.h>
+#include <netdb.h>
 #include "icmp.h"
 
 #ifndef DEFAULT_DATA_SIZE
@@ -44,3 +45,4 @@ typedef struct s_summary {
 
 float avg(t_summary *summary);
 float stddev(t_summary *summary, float mean);
+bool get_ip(char *arg, struct sockaddr_in *output);

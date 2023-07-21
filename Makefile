@@ -10,6 +10,7 @@ SRCS := srcs/main.c \
 		srcs/get_timestamp.c \
 		srcs/generate_data.c \
 		srcs/stats.c \
+		srcs/get_ip.c \
 
 OBJS := $(SRCS:.c=.o)
 DEPS := $(SRCS:.c=.d)
