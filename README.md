@@ -22,6 +22,7 @@ Currently WIP
 - [ ] Verification of ICMP version & other frame data
 - [ ] Clean the code before implementing fancy stuff
 - [ ] [BUG] After a packet timeout, hangs forever
+- [ ] Use `recvmsg` instead of `recvfrom`
 
 # Useful resources
 
