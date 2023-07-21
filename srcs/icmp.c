@@ -49,3 +49,32 @@ uint8_t *serialize_icmp_packet(t_icmp_packet *packet)
         return NULL;
     return (uint8_t *)&packet->type; // small hack to return the address of the first byte of the packet
 }
+
+/**
+ * @brief Checks if the received checksum is valid
+ * 
+ * @param packet Received packet
+ * @return True if the received checksum is equal to the computed checksum, false otherwise
+ */
+bool compare_checksum(t_icmp_packet *packet)
+{
+    uint16_t received_checksum = packet->checksum;
+    packet->checksum = 0;
+    compute_icmp_checksum(packet);
+    if (received_checksum != packet->checksum) {
+        fprintf(stderr, "ft_ping: warning: remote host returned an invalid checksum (got: %#04x, expected: %#04x)\n", received_checksum, packet->checksum);
+        return false;
+    }
+    return true;
+}
+
+t_icmp_packet generate_base_packet(uint32_t size)
+{
+    t_icmp_packet packet = {0};
+    packet.type = ECHO_REQUEST;
+    packet.code = 0;
+    packet.identifier = get_echo_identifier();
+    generate_data(packet.data, size);
+    packet.size = size;
+    return packet;
+}

@@ -16,11 +16,11 @@ Currently WIP
 - [X] Collect the correct `ttl`
 - [x] Fix response time's inaccuracy
 - [x] Setup `alarm()` & `signal` handler to timeout pings
+- [x] Clean the code before implementing fancy stuff
 
 ## TODO
 
 - [ ] Verification of ICMP version & other frame data
-- [ ] Clean the code before implementing fancy stuff
 - [ ] [BUG] After a packet timeout, hangs forever
 - [ ] Use `recvmsg` instead of `recvfrom`
 

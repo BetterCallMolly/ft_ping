@@ -33,6 +33,10 @@
     #define DEFAULT_TIMEOUT 3 // 3 seconds
 #endif
 
+#ifndef LOGGING_FD
+    #define LOGGING_FD STDOUT_FILENO // stdout is used by inetutils-2.0's ping
+#endif
+
 typedef struct s_summary {
     char HOST_NAME[MAX_ARG_SIZE];
     uint32_t sent;
@@ -46,3 +50,12 @@ typedef struct s_summary {
 float avg(t_summary *summary);
 float stddev(t_summary *summary, float mean);
 bool get_ip(char *arg, struct sockaddr_in *output);
+
+// Logging functions
+void preping_info(char *host, char *ip, uint16_t size);
+void postping_info(t_summary *summary);
+void ping_info(t_summary *summary, t_icmp_packet *response_packet, uint8_t ttl, float response_time, struct sockaddr_in *sa);
+
+// Wrappers
+ssize_t send_packet(t_icmp_packet *packet, int sockfd, struct sockaddr_in *dest);
+ssize_t receive_packet(int sockfd, uint8_t *buffer, size_t size);

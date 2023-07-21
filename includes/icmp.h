@@ -71,6 +71,9 @@ int32_t checksum(uint8_t *buffer, uint32_t n);
 uint16_t get_echo_identifier(void);
 uint32_t get_timestamp(void);
 void generate_data(uint8_t *buffer, uint32_t size);
+bool compare_checksum(t_icmp_packet *packet);
+t_icmp_packet generate_base_packet(uint32_t size);
+
 
 // Debug functions
 void disasm_icmp_packet(t_icmp_packet *packet, bool disasm_data);

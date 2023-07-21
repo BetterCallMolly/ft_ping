@@ -11,6 +11,8 @@ SRCS := srcs/main.c \
 		srcs/generate_data.c \
 		srcs/stats.c \
 		srcs/get_ip.c \
+		srcs/logging.c \
+		srcs/network.c \
 
 OBJS := $(SRCS:.c=.o)
 DEPS := $(SRCS:.c=.d)
