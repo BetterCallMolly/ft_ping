@@ -22,8 +22,7 @@ void init_summary(char *arg) {
 
 int main(int argc, char **argv) {
     if (argc == 1) {
-        fprintf(stderr, "ft_ping: missing host operand\n");
-        show_usage();
+        fprintf(stderr, "ft_ping: missing host operand\nTry 'ft_ping --help' for more information.\n");
         exit(1);
     }
     t_options options;
