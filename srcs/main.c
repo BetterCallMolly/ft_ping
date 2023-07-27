@@ -23,24 +23,25 @@ void init_summary(char *arg) {
 int main(int argc, char **argv) {
     if (argc == 1) {
         fprintf(stderr, "ft_ping: missing host operand\n");
-        fprintf(stderr, "usage: ft_ping [-hv] destination\n");
-        fprintf(stderr, "       -h? help\n");
+        show_usage();
         exit(1);
     }
-    if (strncmp(argv[1], "-h", 2) == 0 || strncmp(argv[1], "-?", 2) == 0) {
-        fprintf(stderr, "usage: ft_ping [-hv] destination\n");
-        fprintf(stderr, "       -h? help\n");
+    t_options options;
+    options_init(&options);
+    options_parse(&options, argc, argv);
+    if (options.help) {
+        show_usage();
         exit(0);
     }
     struct sockaddr_in sa = {0};
-    if (!get_ip(argv[1], &sa))
+    if (!get_ip(options.hostname, &sa))
         return (1);
 
     // At this point, we have a valid IP address
     t_icmp_packet echo_request = generate_base_packet(DEFAULT_DATA_SIZE);
 
     // Setup signal handlers
-    init_summary(argv[1]);
+    init_summary(options.hostname);
     signal(SIGINT, sigint_handler);
     signal(SIGALRM, ping_timeout);
 
@@ -71,7 +72,7 @@ int main(int argc, char **argv) {
     // const size_t send_size = EMPTY_PACKET_SIZE + echo_request.size;
     const size_t receive_size = ICMP4_FRAME_SIZE + EMPTY_PACKET_SIZE + echo_request.size;
 
-    preping_info(argv[1], inet_ntoa(sa.sin_addr), DEFAULT_DATA_SIZE);
+    preping_info(options.hostname, inet_ntoa(sa.sin_addr), DEFAULT_DATA_SIZE);
     // Surround the below block with a loop to send multiple packets (for now, we'll only send one);
     while (1) {
         // Push our timestamp in the packet

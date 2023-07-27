@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <netdb.h>
 #include "icmp.h"
+#include "options.h"
 
 #ifndef DEFAULT_DATA_SIZE
     #define DEFAULT_DATA_SIZE 56

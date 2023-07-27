@@ -13,6 +13,7 @@ SRCS := srcs/main.c \
 		srcs/get_ip.c \
 		srcs/logging.c \
 		srcs/network.c \
+		srcs/options.c \
 
 OBJS := $(SRCS:.c=.o)
 DEPS := $(SRCS:.c=.d)
