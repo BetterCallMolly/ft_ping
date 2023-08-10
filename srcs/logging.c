@@ -23,7 +23,7 @@ void postping_info(t_summary *summary)
     printf("%d packets transmitted, %d received, %.2f%% packet loss\n",
         summary->sent,
         summary->received,
-        (float) (summary->lost / summary->sent * 100)
+        (summary->received == 0) ? 100 : (float)(summary->sent - summary->received) / (float)summary->sent * 100
     );
     float avg_delay = avg(summary);
     float standard_dev = stddev(summary, avg_delay);
