@@ -17,12 +17,12 @@ Currently WIP
 - [x] Fix response time's inaccuracy
 - [x] Setup `alarm()` & `signal` handler to timeout pings
 - [x] Clean the code before implementing fancy stuff
+- [x] Use `recvmsg` instead of `recvfrom`
 
 ## TODO
 
 - [ ] Verification of ICMP version & other frame data
 - [ ] [BUG] After a packet timeout, hangs forever
-- [ ] Use `recvmsg` instead of `recvfrom`
 
 # Useful resources
 
