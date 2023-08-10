@@ -52,6 +52,19 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
+    // Set timeout
+    struct timeval timeout;
+    timeout.tv_sec = DEFAULT_TIMEOUT;
+    timeout.tv_usec = 0;
+
+    // use setsockopt() to request timeout on recv()
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
+        char *error = strerror(errno);
+        fprintf(stderr, "ft_ping: setsockopt: %s\n", error);
+        exit(1);
+    }
+
+
     // Set socket options
     int ttl = 64;
 
@@ -86,13 +99,15 @@ int main(int argc, char **argv) {
             exit(1);
         }
         g_summary.sent++;
-
         // Receive packet
         uint8_t buffer[IP_MAXPACKET];
         ssize_t bytes_received = receive_packet(sockfd, buffer, receive_size);
         if (bytes_received < 0) {
             close(sockfd);
             exit(1); // Typically, recv errors are fatal, it's not worth retrying
+        } else if (bytes_received == 0) {
+            g_summary.lost++;
+            continue;
         }
         g_summary.received++;
         uint8_t version = buffer[0] >> 4;
